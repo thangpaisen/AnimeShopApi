@@ -1,4 +1,5 @@
 const Product = require("../models/Product");
+const Category = require("../models/Category");
 class ProductController {
   //GET /products
   async show(req, res) {
@@ -10,15 +11,7 @@ class ProductController {
     }
   }
 
-  //GET /products/HotSales
-  async HotSales(req, res) {
-    try {
-      const products = await Product.find({}).sort({sale: -1});
-      res.json(products);
-    } catch (error) {
-      res.json({ message: error });
-    }
-  }
+ 
 
   //POST /products
   async create(req, res) {
@@ -86,6 +79,34 @@ class ProductController {
       res.json({ message: error });
     }
   }
-}
+
+   //GET /products/HotSales
+  async HotSales(req, res) {
+    try {
+      const products = await Product.find({}).sort({sale: -1});
+      res.json(products);
+    } catch (error) {
+      res.json({ message: error });
+    }
+  }
+   //GET /products/category/:ProductType
+  async ProductType(req, res) {
+    try {
+      const products = await Product.find({productType: req.params.ProductType})
+      res.json(products);
+    } catch (error) {
+      res.json({ message: error });
+    }
+  }
+  //GET /products/Search/:name
+  async Search(req, res) {
+    try {
+      const products = await Product.find({title: {'$regex': req.params.name}})
+      res.json(products);
+    } catch (error) {
+      res.json({ message: error });
+    }
+  }
+} 
 
 module.exports = new ProductController();
